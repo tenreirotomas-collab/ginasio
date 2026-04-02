@@ -11,19 +11,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #0a0a0f; color: #f0ede8;
-      font-family: 'DM Sans', sans-serif;
-      min-height: 100vh; -webkit-tap-highlight-color: transparent;
-    }
+    body { background: #0a0a0f; color: #f0ede8; font-family: 'DM Sans', sans-serif; min-height: 100vh; -webkit-tap-highlight-color: transparent; }
     .app { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #0a0a0f; padding-bottom: 90px; }
-    .header {
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      padding: 24px 20px 20px; border-bottom: 2px solid #e8474722;
-      position: sticky; top: 0; z-index: 100;
-    }
+    .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 20px 20px 0; border-bottom: 2px solid #e8474722; position: sticky; top: 0; z-index: 100; }
     .header-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 3px; color: #e84747; }
     .header-sub { font-size: 0.72rem; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+    .tab-bar { display: flex; margin-top: 12px; }
+    .tab { flex: 1; padding: 10px 0; text-align: center; font-size: 0.78rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-bottom: 2px solid transparent; color: #555; transition: all 0.18s; }
+    .tab.active { color: #e84747; border-bottom-color: #e84747; }
     .btn { border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600; transition: all 0.18s; display: inline-flex; align-items: center; gap: 6px; border-radius: 10px; }
     .btn:active { transform: scale(0.96); }
     .btn-primary { background: #e84747; color: #fff; padding: 13px 22px; font-size: 0.9rem; width: 100%; justify-content: center; border-radius: 12px; box-shadow: 0 4px 20px #e8474733; }
@@ -36,7 +31,7 @@
     .card-date { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; color: #e0ddd8; }
     .card-time { font-size: 0.78rem; color: #e84747; background: #e8474715; border: 1px solid #e8474730; padding: 3px 8px; border-radius: 6px; font-weight: 600; }
     .card-body { padding: 14px 18px; }
-    .exercise-chip { display: inline-flex; align-items: center; gap: 6px; background: #1a1a2e; border: 1px solid #2a2a3e; border-radius: 8px; padding: 5px 10px; font-size: 0.78rem; color: #ccc; margin: 3px 3px 3px 0; }
+    .exercise-chip { display: inline-flex; align-items: center; gap: 5px; background: #1a1a2e; border: 1px solid #2a2a3e; border-radius: 8px; padding: 5px 10px; font-size: 0.78rem; color: #ccc; margin: 3px 3px 3px 0; flex-wrap: wrap; }
     .exercise-chip strong { color: #fff; }
     .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 600; margin: 2px; }
     .badge-sauna { background: #2a1a00; color: #ff9500; border: 1px solid #ff950040; }
@@ -45,7 +40,7 @@
     .form-section { padding: 0 20px 20px; }
     .form-row { display: grid; gap: 12px; margin-bottom: 14px; }
     .form-row-2 { grid-template-columns: 1fr 1fr; }
-    .form-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-row-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
     .field { display: flex; flex-direction: column; gap: 6px; }
     .field label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: #666; font-weight: 600; }
     .field input { background: #12121e; border: 1.5px solid #1e1e2e; border-radius: 10px; color: #f0ede8; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; padding: 11px 14px; outline: none; transition: border-color 0.18s; width: 100%; -webkit-appearance: none; }
@@ -69,81 +64,55 @@
     .fab:active { transform: scale(0.92); }
     .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #1e3a1e; border: 1px solid #2a5a2a; color: #6fc96f; padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; z-index: 300; animation: fadeInOut 2.5s forwards; white-space: nowrap; }
     @keyframes fadeInOut { 0%{opacity:0;transform:translateX(-50%) translateY(10px)} 15%{opacity:1;transform:translateX(-50%) translateY(0)} 75%{opacity:1} 100%{opacity:0} }
-    .copy-list { padding: 12px 16px; }
-    .copy-item { background: #12121e; border: 1.5px solid #1e1e2e; border-radius: 14px; margin-bottom: 10px; padding: 16px; cursor: pointer; transition: all 0.18s; }
-    .copy-item:active { border-color: #e84747; background: #16162a; }
-    .copy-item-date { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; color: #fff; margin-bottom: 4px; }
-    .copy-item-sub { font-size: 0.78rem; color: #666; }
+    .plan-section { padding: 20px; }
+    .plan-card { background: #12121e; border: 1px solid #1e1e2e; border-radius: 16px; margin-bottom: 16px; overflow: hidden; }
+    .plan-card-header { background: #14142a; padding: 14px 18px; border-bottom: 1px solid #1e1e2e; }
+    .plan-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; color: #e84747; }
+    .plan-card-sub { font-size: 0.75rem; color: #666; margin-top: 2px; }
+    .plan-card-body { padding: 16px 18px; }
+    .plan-text { font-size: 0.85rem; color: #aaa; line-height: 1.6; margin-bottom: 10px; }
+    .plan-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.78rem; }
+    .plan-table th { background: #1a1a2e; color: #e84747; padding: 8px 10px; text-align: left; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; }
+    .plan-table td { padding: 8px 10px; border-bottom: 1px solid #1a1a2e; color: #ccc; vertical-align: top; }
+    .plan-table tr:last-child td { border-bottom: none; }
+    .plan-table .ex-num { color: #e84747; font-weight: 700; }
+    .plan-tip { background: #1a1a2e; border-left: 3px solid #e84747; border-radius: 0 8px 8px 0; padding: 10px 14px; margin: 8px 0; font-size: 0.82rem; color: #bbb; line-height: 1.5; }
+    .plan-tip strong { color: #e0ddd8; display: block; margin-bottom: 3px; }
+    .plan-bullet { display: flex; gap: 8px; font-size: 0.82rem; color: #aaa; margin: 6px 0; line-height: 1.5; }
+    .plan-bullet::before { content: "▸"; color: #e84747; flex-shrink: 0; margin-top: 1px; }
     input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5); }
-    .full-page { position: fixed; inset: 0; background: #0a0a0f; z-index: 150; overflow-y: auto; padding-bottom: 40px; max-width: 480px; margin: 0 auto; }
   </style>
 </head>
 <body>
-<div class="app" id="app">
-  <!-- Rendered by JS -->
-</div>
-
+<div class="app" id="app"></div>
 <script>
 const DB_KEY = "gym_tracker_workouts";
-
-function loadWorkouts() {
-  try { return JSON.parse(localStorage.getItem(DB_KEY)) || []; } catch { return []; }
-}
-function saveWorkouts(data) {
-  try { localStorage.setItem(DB_KEY, JSON.stringify(data)); } catch {}
-}
-function emptyExercise() {
-  return { id: Date.now() + Math.random(), nome: "", series: "", reps: "", carga: "" };
-}
+function loadWorkouts() { try { return JSON.parse(localStorage.getItem(DB_KEY)) || []; } catch { return []; } }
+function saveWorkouts(data) { try { localStorage.setItem(DB_KEY, JSON.stringify(data)); } catch {} }
+function emptyExercise() { return { id: Date.now() + Math.random(), nome: "", series: "", reps: "", carga: "", tempo: "" }; }
 function emptyWorkout() {
   const now = new Date();
-  return {
-    id: Date.now(),
-    data: now.toISOString().slice(0,10),
-    hora: now.toTimeString().slice(0,5),
-    exercicios: [emptyExercise()],
-    sauna: false, banhoTurco: false
-  };
+  return { id: Date.now(), data: now.toISOString().slice(0,10), hora: now.toTimeString().slice(0,5), exercicios: [emptyExercise()], sauna: false, banhoTurco: false };
 }
-function formatDate(s) {
-  if (!s) return "";
-  const [y,m,d] = s.split("-"); return `${d}/${m}/${y}`;
-}
+function formatDate(s) { if (!s) return ""; const [y,m,d] = s.split("-"); return `${d}/${m}/${y}`; }
 
-let state = {
-  workouts: loadWorkouts(),
-  view: "list",
-  form: null,
-  editingId: null,
-  toast: "",
-  toastTimer: null
-};
+let state = { workouts: loadWorkouts(), view: "list", tab: "treinos", form: null, editingId: null, toast: "", toastTimer: null };
 
-function setState(patch) {
-  Object.assign(state, patch);
-  render();
-}
-
+function setState(patch) { Object.assign(state, patch); render(); }
 function showToast(msg) {
   if (state.toastTimer) clearTimeout(state.toastTimer);
-  const timer = setTimeout(() => setState({ toast: "", toastTimer: null }), 2600);
-  setState({ toast: msg, toastTimer: timer });
+  const t = setTimeout(() => setState({ toast: "", toastTimer: null }), 2600);
+  setState({ toast: msg, toastTimer: t });
 }
-
 function saveForm() {
   const form = state.form;
   const filtered = { ...form, exercicios: form.exercicios.filter(e => e.nome.trim()) };
-  let updated;
-  if (state.editingId) {
-    updated = state.workouts.map(w => w.id === state.editingId ? filtered : w);
-  } else {
-    updated = [filtered, ...state.workouts];
-  }
+  let updated = state.editingId ? state.workouts.map(w => w.id === state.editingId ? filtered : w) : [filtered, ...state.workouts];
   saveWorkouts(updated);
+  const msg = state.editingId ? "Treino atualizado! 💪" : "Treino guardado! 💪";
   setState({ workouts: updated, view: "list", form: null, editingId: null });
-  showToast(state.editingId ? "Treino atualizado! 💪" : "Treino guardado! 💪");
+  showToast(msg);
 }
-
 function deleteWorkout(id) {
   if (!confirm("Apagar este treino?")) return;
   const updated = state.workouts.filter(w => w.id !== id);
@@ -151,32 +120,23 @@ function deleteWorkout(id) {
   setState({ workouts: updated });
   showToast("Treino apagado");
 }
-
 function copyWorkout(w) {
-  const copied = JSON.parse(JSON.stringify(w));
-  copied.id = Date.now();
+  const c = JSON.parse(JSON.stringify(w));
+  c.id = Date.now();
   const now = new Date();
-  copied.data = now.toISOString().slice(0,10);
-  copied.hora = now.toTimeString().slice(0,5);
-  copied.exercicios = copied.exercicios.map(e => ({ ...e, id: Date.now() + Math.random() }));
-  setState({ form: copied, editingId: null, view: "form" });
+  c.data = now.toISOString().slice(0,10);
+  c.hora = now.toTimeString().slice(0,5);
+  c.exercicios = c.exercicios.map(e => ({ ...e, id: Date.now() + Math.random() }));
+  setState({ form: c, editingId: null, view: "form" });
   showToast("Treino copiado! Edita à vontade ✏️");
 }
-
-function updateFormField(field, value) {
-  setState({ form: { ...state.form, [field]: value } });
-}
-
-function updateExercise(idx, field, value) {
+function updateFormField(f, v) { setState({ form: { ...state.form, [f]: v } }); }
+function updateExercise(idx, field, val) {
   const exs = [...state.form.exercicios];
-  exs[idx] = { ...exs[idx], [field]: value };
+  exs[idx] = { ...exs[idx], [field]: val };
   setState({ form: { ...state.form, exercicios: exs } });
 }
-
-function addExercise() {
-  setState({ form: { ...state.form, exercicios: [...state.form.exercicios, emptyExercise()] } });
-}
-
+function addExercise() { setState({ form: { ...state.form, exercicios: [...state.form.exercicios, emptyExercise()] } }); }
 function removeExercise(idx) {
   let exs = state.form.exercicios.filter((_, i) => i !== idx);
   if (!exs.length) exs = [emptyExercise()];
@@ -186,54 +146,51 @@ function removeExercise(idx) {
 function render() {
   const app = document.getElementById("app");
   app.innerHTML = "";
-
-  // Header
-  const header = el("div", "header", `
+  const header = document.createElement("div");
+  header.className = "header";
+  header.innerHTML = `
     <div class="header-title">🏋️ GYM LOG</div>
     <div class="header-sub">O teu diário de treino</div>
-  `);
+    <div class="tab-bar">
+      <div class="tab ${state.tab === 'treinos' ? 'active' : ''}" onclick="switchTab('treinos')">📋 Treinos</div>
+      <div class="tab ${state.tab === 'plano' ? 'active' : ''}" onclick="switchTab('plano')">📖 Plano</div>
+    </div>`;
   app.appendChild(header);
-
-  if (state.view === "list") renderList(app);
-  else if (state.view === "form") renderForm(app);
-  else if (state.view === "copy") renderCopy(app);
-
+  if (state.tab === "treinos") {
+    if (state.view === "list") renderList(app);
+    else if (state.view === "form") renderForm(app);
+  } else {
+    renderPlan(app);
+  }
   if (state.toast) {
-    const toast = el("div", "toast", state.toast);
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.textContent = state.toast;
     app.appendChild(toast);
   }
-
-  // Re-attach all listeners
   attachListeners();
 }
 
-function el(tag, cls, html) {
-  const e = document.createElement(tag);
-  e.className = cls;
-  if (html) e.innerHTML = html;
-  return e;
-}
+function switchTab(tab) { setState({ tab, view: "list" }); }
 
 function renderList(app) {
-  const section = el("div", "section");
+  const section = document.createElement("div");
+  section.className = "section";
   if (state.workouts.length === 0) {
-    section.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">🏋️</div>
-        <div class="empty-title">Sem treinos ainda</div>
-        <div class="empty-sub">Toca no + para registar o teu primeiro treino</div>
-      </div>`;
+    section.innerHTML = `<div class="empty-state"><div class="empty-icon">🏋️</div><div class="empty-title">Sem treinos ainda</div><div class="empty-sub">Toca no + para registar o teu primeiro treino</div></div>`;
   } else {
     state.workouts.forEach(w => {
-      const exChips = w.exercicios.filter(e => e.nome.trim()).map(e =>
-        `<div class="exercise-chip"><strong>${e.nome}</strong>${e.series ? `<span>${e.series}s</span>` : ""}${e.reps ? `<span>× ${e.reps}r</span>` : ""}${e.carga ? `<span>· ${e.carga}kg</span>` : ""}</div>`
-      ).join("");
-      const badges = [
-        w.sauna ? `<span class="badge badge-sauna">🧖 Sauna</span>` : "",
-        w.banhoTurco ? `<span class="badge badge-turco">💨 Banho Turco</span>` : ""
-      ].join("");
-
-      const card = el("div", "card");
+      const exChips = w.exercicios.filter(e => e.nome.trim()).map(e => {
+        let details = [];
+        if (e.series) details.push(`${e.series}s`);
+        if (e.reps) details.push(`× ${e.reps}r`);
+        if (e.carga) details.push(`· ${e.carga}`);
+        if (e.tempo) details.push(`⏱ ${e.tempo}`);
+        return `<div class="exercise-chip"><strong>${e.nome}</strong>${details.map(d => `<span>${d}</span>`).join("")}</div>`;
+      }).join("");
+      const badges = [w.sauna ? `<span class="badge badge-sauna">🧖 Sauna</span>` : "", w.banhoTurco ? `<span class="badge badge-turco">💨 Banho Turco</span>` : ""].join("");
+      const card = document.createElement("div");
+      card.className = "card";
       card.innerHTML = `
         <div class="card-header">
           <div class="card-date">📅 ${formatDate(w.data)}</div>
@@ -253,136 +210,173 @@ function renderList(app) {
     });
   }
   app.appendChild(section);
-
-  // FAB
-  const fab = el("button", "fab");
+  const fab = document.createElement("button");
+  fab.className = "fab";
   fab.innerHTML = "+";
-  fab.title = "Novo treino";
   fab.onclick = () => setState({ form: emptyWorkout(), editingId: null, view: "form" });
   app.appendChild(fab);
 }
 
 function renderForm(app) {
   const f = state.form;
-
-  const backBtn = document.createElement("button");
-  backBtn.className = "back-btn";
-  backBtn.innerHTML = "← Voltar";
-  backBtn.onclick = () => setState({ view: "list", form: null, editingId: null });
-  app.appendChild(backBtn);
-
-  const title = el("div", "page-title", state.editingId ? "Editar Treino" : "Novo Treino");
+  const back = document.createElement("button");
+  back.className = "back-btn";
+  back.innerHTML = "← Voltar";
+  back.onclick = () => setState({ view: "list", form: null, editingId: null });
+  app.appendChild(back);
+  const title = document.createElement("div");
+  title.className = "page-title";
+  title.textContent = state.editingId ? "Editar Treino" : "Novo Treino";
   app.appendChild(title);
-
-  const fs = el("div", "form-section");
+  const fs = document.createElement("div");
+  fs.className = "form-section";
   fs.style.marginTop = "16px";
-
-  // Date + Time
-  fs.innerHTML += `
+  fs.innerHTML = `
     <div class="form-row form-row-2">
-      <div class="field">
-        <label>📅 Data</label>
-        <input type="date" id="f-data" value="${f.data}" />
-      </div>
-      <div class="field">
-        <label>⏰ Hora de Início</label>
-        <input type="time" id="f-hora" value="${f.hora}" />
-      </div>
+      <div class="field"><label>📅 Data</label><input type="date" id="f-data" value="${f.data}" /></div>
+      <div class="field"><label>⏰ Hora de Início</label><input type="time" id="f-hora" value="${f.hora}" /></div>
     </div>
     <div class="divider"></div>
-    <div class="section-label">🏋️ Exercícios</div>
-  `;
-
-  // Exercises
+    <div class="section-label">🏋️ Exercícios</div>`;
   f.exercicios.forEach((ex, idx) => {
-    fs.innerHTML += `
-      <div class="exercise-form">
-        <div class="exercise-num">EXERCÍCIO ${idx + 1}</div>
-        <div class="field" style="margin-bottom:10px">
-          <label>Nome do Exercício</label>
-          <input type="text" placeholder="Ex: Supino, Agachamento..." data-ex="${idx}" data-field="nome" value="${ex.nome}" />
-        </div>
-        <div class="form-row form-row-3">
-          <div class="field"><label>Séries</label><input type="number" placeholder="4" data-ex="${idx}" data-field="series" value="${ex.series}" /></div>
-          <div class="field"><label>Reps</label><input type="number" placeholder="12" data-ex="${idx}" data-field="reps" value="${ex.reps}" /></div>
-          <div class="field"><label>Carga (kg)</label><input type="number" placeholder="80" data-ex="${idx}" data-field="carga" value="${ex.carga}" /></div>
-        </div>
-        ${f.exercicios.length > 1 ? `<button class="btn btn-danger" style="font-size:0.75rem;padding:6px 10px" onclick="removeExercise(${idx})">🗑️ Remover exercício</button>` : ""}
-      </div>`;
+    const d = document.createElement("div");
+    d.className = "exercise-form";
+    d.innerHTML = `
+      <div class="exercise-num">EXERCÍCIO ${idx + 1}</div>
+      <div class="field" style="margin-bottom:10px">
+        <label>Nome do Exercício</label>
+        <input type="text" placeholder="Ex: Supino, Corrida, Prancha..." data-ex="${idx}" data-field="nome" value="${ex.nome}" />
+      </div>
+      <div class="form-row form-row-4">
+        <div class="field"><label>Séries</label><input type="number" placeholder="3" data-ex="${idx}" data-field="series" value="${ex.series}" /></div>
+        <div class="field"><label>Reps</label><input type="text" placeholder="12" data-ex="${idx}" data-field="reps" value="${ex.reps}" /></div>
+        <div class="field"><label>Carga</label><input type="text" placeholder="2X5" data-ex="${idx}" data-field="carga" value="${ex.carga}" /></div>
+        <div class="field"><label>Tempo</label><input type="text" placeholder="10min" data-ex="${idx}" data-field="tempo" value="${ex.tempo}" /></div>
+      </div>
+      ${f.exercicios.length > 1 ? `<button class="btn btn-danger" style="font-size:0.75rem;padding:6px 10px" onclick="removeExercise(${idx})">🗑️ Remover</button>` : ""}`;
+    fs.appendChild(d);
   });
-
+  const addBtn = document.createElement("button");
+  addBtn.className = "btn btn-secondary";
+  addBtn.style.cssText = "width:100%;justify-content:center;margin-bottom:16px";
+  addBtn.innerHTML = "➕ Adicionar exercício";
+  addBtn.onclick = addExercise;
+  fs.appendChild(addBtn);
   fs.innerHTML += `
-    <button class="btn btn-secondary" style="width:100%;justify-content:center;margin-bottom:16px" onclick="addExercise()">➕ Adicionar exercício</button>
     <div class="divider"></div>
     <div class="section-label">♨️ Recuperação</div>
     <div class="toggle-group">
       <button class="toggle-btn ${f.sauna ? 'active-sauna' : ''}" id="toggle-sauna">🧖 Sauna${f.sauna ? " ✓" : ""}</button>
       <button class="toggle-btn ${f.banhoTurco ? 'active-turco' : ''}" id="toggle-turco">💨 Banho Turco${f.banhoTurco ? " ✓" : ""}</button>
     </div>
-    <button class="btn btn-primary" onclick="saveForm()">💾 Guardar Treino</button>
-  `;
-
+    <button class="btn btn-primary" onclick="saveForm()">💾 Guardar Treino</button>`;
   app.appendChild(fs);
 }
 
-function renderCopy(app) {
-  const page = el("div", "full-page");
-  page.innerHTML = `
-    <div class="card-header" style="background:#12121e;padding:20px;border-bottom:1px solid #1e1e2e;display:flex;align-items:center;gap:12px">
-      <button class="btn btn-ghost" onclick="setState({view:'list'})">←</button>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px">Escolhe um treino para copiar</div>
+function renderPlan(app) {
+  const s = document.createElement("div");
+  s.className = "plan-section";
+  s.innerHTML = `
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <div class="plan-card-title">📋 Plano 2x por Semana</div>
+        <div class="plan-card-sub">Nível Iniciante · Foco em Força</div>
+      </div>
+      <div class="plan-card-body">
+        <p class="plan-text">Dois dias de corpo inteiro (Full Body), com pelo menos 2 dias de descanso entre sessões.</p>
+        <div class="plan-bullet">Dia A — Full Body (ênfase em membros inferiores e empurrar)</div>
+        <div class="plan-bullet">Dia B — Full Body (ênfase em membros inferiores e puxar)</div>
+        <div class="plan-bullet">Descanso mínimo de 2 dias entre cada sessão</div>
+        <div class="plan-bullet">Exemplo: Segunda (A) → Quinta (B)</div>
+      </div>
     </div>
-    <div class="copy-list">
-      ${state.workouts.length === 0
-        ? `<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Sem treinos para copiar</div></div>`
-        : state.workouts.map(w => `
-          <div class="copy-item" onclick="copyWorkoutById(${w.id})">
-            <div class="copy-item-date">📅 ${formatDate(w.data)} — ⏰ ${w.hora}</div>
-            <div class="copy-item-sub">${w.exercicios.filter(e=>e.nome.trim()).map(e=>e.nome).join(", ") || "Sem exercícios"}${(w.sauna||w.banhoTurco) ? " · "+[w.sauna&&"Sauna",w.banhoTurco&&"Banho Turco"].filter(Boolean).join(" + ") : ""}</div>
-          </div>`).join("")}
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <div class="plan-card-title">💪 Dia A — Full Body</div>
+        <div class="plan-card-sub">Ênfase em membros inferiores e empurrar</div>
+      </div>
+      <div class="plan-card-body">
+        <table class="plan-table">
+          <tr><th>#</th><th>Exercício</th><th>Séries × Reps</th><th>Descanso</th></tr>
+          <tr><td class="ex-num">1</td><td>Agachamento</td><td>3 × 5</td><td>3 min</td></tr>
+          <tr><td class="ex-num">2</td><td>Supino</td><td>3 × 5–6</td><td>3 min</td></tr>
+          <tr><td class="ex-num">3</td><td>Remada c/ barra</td><td>3 × 6–8</td><td>2 min</td></tr>
+          <tr><td class="ex-num">4</td><td>Elevação lateral</td><td>2 × 10–15</td><td>60–90s</td></tr>
+          <tr><td class="ex-num">5</td><td>Prancha</td><td>3 × 30–40s</td><td>60s</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <div class="plan-card-title">🔥 Dia B — Full Body</div>
+        <div class="plan-card-sub">Ênfase em membros inferiores e puxar</div>
+      </div>
+      <div class="plan-card-body">
+        <table class="plan-table">
+          <tr><th>#</th><th>Exercício</th><th>Séries × Reps</th><th>Descanso</th></tr>
+          <tr><td class="ex-num">1</td><td>Peso morto</td><td>3 × 5</td><td>3 min</td></tr>
+          <tr><td class="ex-num">2</td><td>Shoulder press</td><td>3 × 5–6</td><td>3 min</td></tr>
+          <tr><td class="ex-num">3</td><td>Lat pulldown</td><td>3 × 6–8</td><td>2 min</td></tr>
+          <tr><td class="ex-num">4</td><td>Lunges</td><td>2 × 8–10 p/perna</td><td>2 min</td></tr>
+          <tr><td class="ex-num">5</td><td>Bíceps + Tríceps</td><td>2 × 10–12 cada</td><td>60s</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-card-header"><div class="plan-card-title">📈 Progressão de Carga</div></div>
+      <div class="plan-card-body">
+        <div class="plan-bullet">Exercícios principais: +2,5 kg por sessão</div>
+        <div class="plan-bullet">Exercícios acessórios: +2,5 kg quando completares todas as séries no limite superior</div>
+        <div class="plan-bullet">Se não conseguires completar as reps, mantém ou reduz 5–10%</div>
+        <div class="plan-bullet">Regista os pesos em cada treino — essencial para acompanhar a progressão</div>
+      </div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-card-header"><div class="plan-card-title">💡 Dicas Importantes</div></div>
+      <div class="plan-card-body">
+        <div class="plan-tip"><strong>🎯 Técnica primeiro</strong>Começa sempre com pesos leves. Uma boa técnica desde o início previne lesões.</div>
+        <div class="plan-tip"><strong>🔥 Aquecimento</strong>5–10 min de cardio leve. Nos exercícios principais, 1–2 séries com 40–60% do peso de trabalho.</div>
+        <div class="plan-tip"><strong>⏸ Descanso entre séries</strong>Exercícios compostos: 2–3 min. Exercícios acessórios: 60–90 segundos.</div>
+        <div class="plan-tip"><strong>😴 Sono e recuperação</strong>7–9 horas por noite. Proteína: 1,6–2g por kg de peso corporal por dia.</div>
+      </div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-card-header">
+        <div class="plan-card-title">🚀 Quando Evoluir o Plano</div>
+        <div class="plan-card-sub">Este plano é adequado para os primeiros 3–6 meses</div>
+      </div>
+      <div class="plan-card-body">
+        <div class="plan-bullet">Aumentar para 3x por semana se o horário permitir</div>
+        <div class="plan-bullet">Transitar para programa intermédio (Texas Method, 5/3/1)</div>
+        <div class="plan-bullet">Consultar um treinador para adaptar o plano aos teus objetivos</div>
+      </div>
     </div>`;
-  app.appendChild(page);
+  app.appendChild(s);
 }
 
 function attachListeners() {
-  // Date/time inputs in form
   const fData = document.getElementById("f-data");
   const fHora = document.getElementById("f-hora");
   if (fData) fData.addEventListener("change", e => updateFormField("data", e.target.value));
   if (fHora) fHora.addEventListener("change", e => updateFormField("hora", e.target.value));
-
-  // Exercise inputs
   document.querySelectorAll("[data-ex]").forEach(input => {
-    input.addEventListener("input", e => {
-      const idx = parseInt(e.target.dataset.ex);
-      const field = e.target.dataset.field;
-      updateExercise(idx, field, e.target.value);
-    });
+    input.addEventListener("input", e => updateExercise(parseInt(e.target.dataset.ex), e.target.dataset.field, e.target.value));
   });
-
-  // Sauna / Turco toggles
   const ts = document.getElementById("toggle-sauna");
   const tt = document.getElementById("toggle-turco");
   if (ts) ts.addEventListener("click", () => updateFormField("sauna", !state.form.sauna));
   if (tt) tt.addEventListener("click", () => updateFormField("banhoTurco", !state.form.banhoTurco));
 }
 
-// Global helpers for inline onclick
-window.editWorkout = (id) => {
-  const w = state.workouts.find(x => x.id === id);
-  if (w) setState({ form: JSON.parse(JSON.stringify(w)), editingId: id, view: "form" });
-};
-window.copyWorkoutById = (id) => {
-  const w = state.workouts.find(x => x.id === id);
-  if (w) copyWorkout(w);
-};
+window.editWorkout = (id) => { const w = state.workouts.find(x => x.id === id); if (w) setState({ form: JSON.parse(JSON.stringify(w)), editingId: id, view: "form" }); };
+window.copyWorkoutById = (id) => { const w = state.workouts.find(x => x.id === id); if (w) copyWorkout(w); };
 window.deleteWorkout = deleteWorkout;
 window.saveForm = saveForm;
 window.addExercise = addExercise;
 window.removeExercise = removeExercise;
 window.setState = setState;
+window.switchTab = switchTab;
 
-// Boot
 render();
 </script>
 </body>
