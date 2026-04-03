@@ -105,6 +105,7 @@ function showToast(msg) {
   setState({ toast: msg, toastTimer: t });
 }
 function saveForm() {
+  syncFormFromDOM();
   const form = state.form;
   const filtered = { ...form, exercicios: form.exercicios.filter(e => e.nome.trim()) };
   let updated = state.editingId ? state.workouts.map(w => w.id === state.editingId ? filtered : w) : [filtered, ...state.workouts];
@@ -140,8 +141,24 @@ function updateExercise(idx, field, val) {
   state.form = { ...state.form, exercicios: exs };
   // no re-render while typing
 }
-function addExercise() { setState({ form: { ...state.form, exercicios: [...state.form.exercicios, emptyExercise()] } }); }
+function syncFormFromDOM() {
+  const fData = document.getElementById("f-data");
+  const fHora = document.getElementById("f-hora");
+  if (fData) state.form.data = fData.value;
+  if (fHora) state.form.hora = fHora.value;
+  document.querySelectorAll("[data-ex]").forEach(input => {
+    const idx = parseInt(input.dataset.ex);
+    if (state.form && state.form.exercicios[idx]) {
+      state.form.exercicios[idx][input.dataset.field] = input.value;
+    }
+  });
+}
+function addExercise() {
+  syncFormFromDOM();
+  setState({ form: { ...state.form, exercicios: [...state.form.exercicios, emptyExercise()] } });
+}
 function removeExercise(idx) {
+  syncFormFromDOM();
   let exs = state.form.exercicios.filter((_, i) => i !== idx);
   if (!exs.length) exs = [emptyExercise()];
   setState({ form: { ...state.form, exercicios: exs } });
