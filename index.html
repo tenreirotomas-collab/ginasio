@@ -130,11 +130,15 @@ function copyWorkout(w) {
   setState({ form: c, editingId: null, view: "form" });
   showToast("Treino copiado! Edita à vontade ✏️");
 }
-function updateFormField(f, v) { setState({ form: { ...state.form, [f]: v } }); }
+function updateFormField(f, v) {
+  state.form = { ...state.form, [f]: v };
+  // no re-render, just update state silently
+}
 function updateExercise(idx, field, val) {
   const exs = [...state.form.exercicios];
   exs[idx] = { ...exs[idx], [field]: val };
-  setState({ form: { ...state.form, exercicios: exs } });
+  state.form = { ...state.form, exercicios: exs };
+  // no re-render while typing
 }
 function addExercise() { setState({ form: { ...state.form, exercicios: [...state.form.exercicios, emptyExercise()] } }); }
 function removeExercise(idx) {
@@ -359,13 +363,19 @@ function attachListeners() {
   const fHora = document.getElementById("f-hora");
   if (fData) fData.addEventListener("change", e => updateFormField("data", e.target.value));
   if (fHora) fHora.addEventListener("change", e => updateFormField("hora", e.target.value));
+  // Use input to silently update state (no re-render = keyboard stays open)
   document.querySelectorAll("[data-ex]").forEach(input => {
-    input.addEventListener("input", e => updateExercise(parseInt(e.target.dataset.ex), e.target.dataset.field, e.target.value));
+    input.addEventListener("input", e => {
+      const exs = [...state.form.exercicios];
+      const idx = parseInt(e.target.dataset.ex);
+      exs[idx] = { ...exs[idx], [e.target.dataset.field]: e.target.value };
+      state.form = { ...state.form, exercicios: exs };
+    });
   });
   const ts = document.getElementById("toggle-sauna");
   const tt = document.getElementById("toggle-turco");
-  if (ts) ts.addEventListener("click", () => updateFormField("sauna", !state.form.sauna));
-  if (tt) tt.addEventListener("click", () => updateFormField("banhoTurco", !state.form.banhoTurco));
+  if (ts) ts.addEventListener("click", () => { state.form = { ...state.form, sauna: !state.form.sauna }; render(); });
+  if (tt) tt.addEventListener("click", () => { state.form = { ...state.form, banhoTurco: !state.form.banhoTurco }; render(); });
 }
 
 window.editWorkout = (id) => { const w = state.workouts.find(x => x.id === id); if (w) setState({ form: JSON.parse(JSON.stringify(w)), editingId: id, view: "form" }); };
