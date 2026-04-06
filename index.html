@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>GYM LOG</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0f; color: #f0ede8; font-family: 'DM Sans', sans-serif; min-height: 100vh; -webkit-tap-highlight-color: transparent; }
+    .app { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #0a0a0f; padding-bottom: 90px; }
+    .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 20px 20px 0; border-bottom: 2px solid #e8474722; position: sticky; top: 0; z-index: 100; }
+    .header-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 3px; color: #e84747; }
+    .header-sub { font-size: 0.72rem; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+    .tab-bar { display: flex; margin-top: 12px; }
+    .tab { flex: 1; padding: 10px 0; text-align: center; font-size: 0.78rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; border-bottom: 2px solid transparent; color: #555; transition: all 0.18s; }
+    .tab.active { color: #e84747; border-bottom-color: #e84747; }
+    .btn { border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 600; transition: all 0.18s; display: inline-flex; align-items: center; gap: 6px; border-radius: 10px; }
+    .btn:active { transform: scale(0.96); }
+    .btn-primary { background: #e84747; color: #fff; padding: 13px 22px; font-size: 0.9rem; width: 100%; justify-content: center; border-radius: 12px; box-shadow: 0 4px 20px #e8474733; }
+    .btn-secondary { background: #1e1e2e; color: #bbb; padding: 10px 16px; font-size: 0.82rem; border: 1px solid #2a2a3e; }
+    .btn-danger { background: #2a1010; color: #e84747; padding: 8px 12px; font-size: 0.82rem; border: 1px solid #3a1a1a; }
+    .section { padding: 20px; }
+    .card { background: #12121e; border: 1px solid #1e1e2e; border-radius: 16px; overflow: hidden; margin-bottom: 14px; }
+    .card-header { padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; background: #14142a; border-bottom: 1px solid #1e1e2e; }
+    .card-date { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 2px; color: #e0ddd8; }
+    .card-time { font-size: 0.78rem; color: #e84747; background: #e8474715; border: 1px solid #e8474730; padding: 3px 8px; border-radius: 6px; font-weight: 600; }
+    .card-body { padding: 14px 18px; }
+    .exercise-chip { display: inline-flex; align-items: center; gap: 5px; background: #1a1a2e; border: 1px solid #2a2a3e; border-radius: 8px; padding: 5px 10px; font-size: 0.78rem; color: #ccc; margin: 3px 3px 3px 0; flex-wrap: wrap; }
+    .exercise-chip strong { color: #fff; }
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 600; margin: 2px; }
+    .badge-sauna { background: #2a1a00; color: #ff9500; border: 1px solid #ff950040; }
+    .badge-turco { background: #001a2a; color: #00aaff; border: 1px solid #00aaff40; }
+    .card-actions { padding: 12px 18px; display: flex; gap: 8px; border-top: 1px solid #1a1a2e; flex-wrap: wrap; }
+    /* FORM */
+    .form-wrap { padding: 0 20px 20px; }
+    .back-btn { display: flex; align-items: center; gap: 8px; background: none; border: none; color: #888; font-size: 0.9rem; cursor: pointer; padding: 20px 0 0; font-family: 'DM Sans', sans-serif; }
+    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px; padding: 8px 0 0; color: #f0ede8; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; color: #666; font-weight: 600; }
+    .field input, .field select { background: #12121e; border: 1.5px solid #1e1e2e; border-radius: 10px; color: #f0ede8; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; padding: 11px 14px; outline: none; transition: border-color 0.18s; width: 100%; -webkit-appearance: none; }
+    .field input:focus { border-color: #e84747; }
+    .field input::placeholder { color: #333; }
+    .divider { height: 1px; background: #1a1a2e; margin: 20px 0; }
+    .section-label { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; color: #444; margin-bottom: 12px; }
+    .exercise-form { background: #12121e; border: 1.5px solid #1e1e2e; border-radius: 14px; padding: 16px; margin-bottom: 10px; }
+    .exercise-num { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 2px; color: #e84747; margin-bottom: 10px; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .toggle-group { display: flex; gap: 10px; margin-bottom: 16px; }
+    .toggle-btn { flex: 1; padding: 12px; border-radius: 12px; border: 1.5px solid #1e1e2e; background: #0e0e1a; color: #555; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.18s; text-align: center; font-family: 'DM Sans', sans-serif; }
+    .toggle-btn.on-sauna { background: #1a1000; border-color: #ff9500; color: #ff9500; }
+    .toggle-btn.on-turco { background: #00111a; border-color: #00aaff; color: #00aaff; }
+    .fab { position: fixed; bottom: 24px; right: 24px; width: 58px; height: 58px; border-radius: 50%; background: #e84747; color: #fff; font-size: 1.6rem; border: none; cursor: pointer; box-shadow: 0 6px 24px #e8474766; display: flex; align-items: center; justify-content: center; z-index: 200; }
+    .fab:active { transform: scale(0.92); }
+    .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #1e3a1e; border: 1px solid #2a5a2a; color: #6fc96f; padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; z-index: 300; animation: fadeInOut 2.5s forwards; white-space: nowrap; }
+    @keyframes fadeInOut { 0%{opacity:0;transform:translateX(-50%) translateY(10px)} 15%{opacity:1;transform:translateX(-50%) translateY(0)} 75%{opacity:1} 100%{opacity:0} }
+    .empty-state { text-align: center; padding: 60px 20px; }
+    .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+    .empty-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 2px; color: #333; }
+    .empty-sub { font-size: 0.82rem; color: #444; margin-top: 6px; }
+    /* PLAN */
+    .plan-section { padding: 20px; }
+    .plan-card { background: #12121e; border: 1px solid #1e1e2e; border-radius: 16px; margin-bottom: 16px; overflow: hidden; }
+    .plan-card-header { background: #14142a; padding: 14px 18px; border-bottom: 1px solid #1e1e2e; }
+    .plan-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; color: #e84747; }
+    .plan-card-sub { font-size: 0.75rem; color: #666; margin-top: 2px; }
+    .plan-card-body { padding: 16px 18px; }
+    .plan-text { font-size: 0.85rem; color: #aaa; line-height: 1.6; margin-bottom: 10px; }
+    .plan-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.78rem; }
+    .plan-table th { background: #1a1a2e; color: #e84747; padding: 8px 10px; text-align: left; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; }
+    .plan-table td { padding: 8px 10px; border-bottom: 1px solid #1a1a2e; color: #ccc; vertical-align: top; }
+    .plan-table tr:last-child td { border-bottom: none; }
+    .plan-table .en { color: #e84747; font-weight: 700; }
+    .plan-tip { background: #1a1a2e; border-left: 3px solid #e84747; border-radius: 0 8px 8px 0; padding: 10px 14px; margin: 8px 0; font-size: 0.82rem; color: #bbb; line-height: 1.5; }
+    .plan-tip strong { color: #e0ddd8; display: block; margin-bottom: 3px; }
+    .plan-bullet { display: flex; gap: 8px; font-size: 0.82rem; color: #aaa; margin: 6px 0; line-height: 1.5; }
+    .plan-bullet::before { content: "▸"; color: #e84747; flex-shrink: 0; }
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5); }
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- header -->
+  <div class="header">
+    <div class="header-title">🏋️ GYM LOG</div>
+    <div class="header-sub">O teu diário de treino</div>
+    <div class="tab-bar">
+      <div class="tab active" id="tab-treinos" onclick="showTab('treinos')">📋 Treinos</div>
+      <div class="tab" id="tab-plano" onclick="showTab('plano')">📖 Plano</div>
+    </div>
+  </div>
+
+  <!-- LIST VIEW -->
+  <div id="view-list">
+    <div id="workout-list" class="section"></div>
+    <button class="fab" onclick="openNewForm()">+</button>
+  </div>
+
+  <!-- FORM VIEW -->
+  <div id="view-form" style="display:none">
+    <div class="form-wrap">
+      <button class="back-btn" onclick="closeForm()">← Voltar</button>
+      <div class="page-title" id="form-title">Novo Treino</div>
+      <div style="height:16px"></div>
+
+      <div class="form-row-2">
+        <div class="field"><label>📅 Data</label><input type="date" id="f-data" /></div>
+        <div class="field"><label>⏰ Hora</label><input type="time" id="f-hora" /></div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-label">🏋️ Exercícios</div>
+      <div id="exercises-container"></div>
+
+      <button class="btn btn-secondary" style="width:100%;justify-content:center;margin-bottom:16px" onclick="addExerciseRow()">➕ Adicionar exercício</button>
+
+      <div class="divider"></div>
+      <div class="section-label">♨️ Recuperação</div>
+      <div class="toggle-group">
+        <button id="btn-sauna" class="toggle-btn" onclick="toggleSauna()">🧖 Sauna</button>
+        <button id="btn-turco" class="toggle-btn" onclick="toggleTurco()">💨 Banho Turco</button>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveWorkout()">💾 Guardar Treino</button>
+    </div>
+  </div>
+
+  <!-- PLAN VIEW -->
+  <div id="view-plano" style="display:none">
+    <div class="plan-section">
+      <div class="plan-card">
+        <div class="plan-card-header">
+          <div class="plan-card-title">📋 Plano 2x por Semana</div>
+          <div class="plan-card-sub">Nível Iniciante · Foco em Força</div>
+        </div>
+        <div class="plan-card-body">
+          <p class="plan-text">Dois dias de corpo inteiro (Full Body), com pelo menos 2 dias de descanso entre sessões.</p>
+          <div class="plan-bullet">Dia A — Full Body (membros inferiores e empurrar)</div>
+          <div class="plan-bullet">Dia B — Full Body (membros inferiores e puxar)</div>
+          <div class="plan-bullet">Descanso mínimo de 2 dias entre sessões</div>
+          <div class="plan-bullet">Exemplo: Segunda (A) → Quinta (B)</div>
+        </div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-card-header">
+          <div class="plan-card-title">💪 Dia A — Full Body</div>
+          <div class="plan-card-sub">Ênfase em membros inferiores e empurrar</div>
+        </div>
+        <div class="plan-card-body">
+          <table class="plan-table">
+            <tr><th>#</th><th>Exercício</th><th>Séries × Reps</th><th>Descanso</th></tr>
+            <tr><td class="en">1</td><td>Agachamento</td><td>3 × 5</td><td>3 min</td></tr>
+            <tr><td class="en">2</td><td>Supino</td><td>3 × 5–6</td><td>3 min</td></tr>
+            <tr><td class="en">3</td><td>Remada c/ barra</td><td>3 × 6–8</td><td>2 min</td></tr>
+            <tr><td class="en">4</td><td>Elevação lateral</td><td>2 × 10–15</td><td>60–90s</td></tr>
+            <tr><td class="en">5</td><td>Prancha</td><td>3 × 30–40s</td><td>60s</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-card-header">
+          <div class="plan-card-title">🔥 Dia B — Full Body</div>
+          <div class="plan-card-sub">Ênfase em membros inferiores e puxar</div>
+        </div>
+        <div class="plan-card-body">
+          <table class="plan-table">
+            <tr><th>#</th><th>Exercício</th><th>Séries × Reps</th><th>Descanso</th></tr>
+            <tr><td class="en">1</td><td>Peso morto</td><td>3 × 5</td><td>3 min</td></tr>
+            <tr><td class="en">2</td><td>Shoulder press</td><td>3 × 5–6</td><td>3 min</td></tr>
+            <tr><td class="en">3</td><td>Lat pulldown</td><td>3 × 6–8</td><td>2 min</td></tr>
+            <tr><td class="en">4</td><td>Lunges</td><td>2 × 8–10/perna</td><td>2 min</td></tr>
+            <tr><td class="en">5</td><td>Bíceps + Tríceps</td><td>2 × 10–12 cada</td><td>60s</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-card-header"><div class="plan-card-title">📈 Progressão de Carga</div></div>
+        <div class="plan-card-body">
+          <div class="plan-bullet">Exercícios principais: +2,5 kg por sessão</div>
+          <div class="plan-bullet">Exercícios acessórios: +2,5 kg ao atingir o limite superior das reps</div>
+          <div class="plan-bullet">Se não conseguires completar as reps, mantém ou reduz 5–10%</div>
+          <div class="plan-bullet">Regista os pesos em cada treino</div>
+        </div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-card-header"><div class="plan-card-title">💡 Dicas Importantes</div></div>
+        <div class="plan-card-body">
+          <div class="plan-tip"><strong>🎯 Técnica primeiro</strong>Começa sempre com pesos leves. Uma boa técnica desde o início previne lesões.</div>
+          <div class="plan-tip"><strong>🔥 Aquecimento</strong>5–10 min de cardio leve. 1–2 séries com 40–60% do peso de trabalho nos exercícios principais.</div>
+          <div class="plan-tip"><strong>⏸ Descanso</strong>Exercícios compostos: 2–3 min. Exercícios acessórios: 60–90 segundos.</div>
+          <div class="plan-tip"><strong>😴 Recuperação</strong>7–9 horas de sono. Proteína: 1,6–2g por kg de peso corporal por dia.</div>
+        </div>
+      </div>
+      <div class="plan-card">
+        <div class="plan-card-header">
+          <div class="plan-card-title">🚀 Quando Evoluir</div>
+          <div class="plan-card-sub">Este plano é adequado para os primeiros 3–6 meses</div>
+        </div>
+        <div class="plan-card-body">
+          <div class="plan-bullet">Aumentar para 3x por semana se o horário permitir</div>
+          <div class="plan-bullet">Transitar para programa intermédio (Texas Method, 5/3/1)</div>
+          <div class="plan-bullet">Consultar um treinador para adaptar o plano</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+</div>
+
+<script>
+const DB_KEY = "gym_tracker_v2";
+let workouts = [];
+let editingId = null;
+let formSauna = false;
+let formTurco = false;
+let exerciseCount = 0;
+
+function load() {
+  try { workouts = JSON.parse(localStorage.getItem(DB_KEY)) || []; } catch { workouts = []; }
+}
+function save() {
+  try { localStorage.setItem(DB_KEY, JSON.stringify(workouts)); } catch {}
+}
+function fmtDate(s) {
+  if (!s) return "";
+  const [y,m,d] = s.split("-"); return `${d}/${m}/${y}`;
+}
+function nowDate() { return new Date().toISOString().slice(0,10); }
+function nowTime() { return new Date().toTimeString().slice(0,5); }
+function uid() { return Date.now() + Math.random(); }
+
+function showToast(msg) {
+  const c = document.getElementById("toast-container");
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 2600);
+}
+
+// --- TABS ---
+function showTab(tab) {
+  document.getElementById("tab-treinos").classList.toggle("active", tab === "treinos");
+  document.getElementById("tab-plano").classList.toggle("active", tab === "plano");
+  document.getElementById("view-list").style.display = tab === "treinos" ? "" : "none";
+  document.getElementById("view-form").style.display = "none";
+  document.getElementById("view-plano").style.display = tab === "plano" ? "" : "none";
+  if (tab === "treinos") renderList();
+}
+
+// --- LIST ---
+function renderList() {
+  const el = document.getElementById("workout-list");
+  if (workouts.length === 0) {
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">🏋️</div><div class="empty-title">Sem treinos ainda</div><div class="empty-sub">Toca no + para registar o teu primeiro treino</div></div>`;
+    return;
+  }
+  el.innerHTML = workouts.map(w => {
+    const chips = (w.exercicios || []).filter(e => e.nome).map(e => {
+      let d = [];
+      if (e.series) d.push(e.series + "s");
+      if (e.reps) d.push("× " + e.reps + "r");
+      if (e.carga) d.push("· " + e.carga);
+      if (e.tempo) d.push("⏱ " + e.tempo);
+      return `<div class="exercise-chip"><strong>${e.nome}</strong>${d.map(x=>`<span>${x}</span>`).join("")}</div>`;
+    }).join("");
+    const badges = [
+      w.sauna ? `<span class="badge badge-sauna">🧖 Sauna</span>` : "",
+      w.banhoTurco ? `<span class="badge badge-turco">💨 Banho Turco</span>` : ""
+    ].join("");
+    return `<div class="card">
+      <div class="card-header">
+        <div class="card-date">📅 ${fmtDate(w.data)}</div>
+        <div class="card-time">⏰ ${w.hora}</div>
+      </div>
+      <div class="card-body">
+        <div class="section-label">Exercícios</div>
+        ${chips || '<span style="color:#444;font-size:0.8rem">Sem exercícios</span>'}
+        ${badges ? `<div style="margin-top:10px">${badges}</div>` : ""}
+      </div>
+      <div class="card-actions">
+        <button class="btn btn-secondary" onclick="openEditForm(${w.id})">✏️ Editar</button>
+        <button class="btn btn-secondary" onclick="openCopyForm(${w.id})">📋 Copiar</button>
+        <button class="btn btn-danger" onclick="deleteWorkout(${w.id})">🗑️</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function deleteWorkout(id) {
+  if (!confirm("Apagar este treino?")) return;
+  workouts = workouts.filter(w => w.id !== id);
+  save();
+  renderList();
+  showToast("Treino apagado");
+}
+
+// --- FORM ---
+function openNewForm() {
+  editingId = null;
+  formSauna = false;
+  formTurco = false;
+  document.getElementById("form-title").textContent = "Novo Treino";
+  document.getElementById("f-data").value = nowDate();
+  document.getElementById("f-hora").value = nowTime();
+  document.getElementById("exercises-container").innerHTML = "";
+  exerciseCount = 0;
+  addExerciseRow();
+  updateSaunaBtn();
+  updateTurcoBtn();
+  document.getElementById("view-list").style.display = "none";
+  document.getElementById("view-form").style.display = "";
+}
+
+function openEditForm(id) {
+  const w = workouts.find(x => x.id === id);
+  if (!w) return;
+  editingId = id;
+  formSauna = !!w.sauna;
+  formTurco = !!w.banhoTurco;
+  document.getElementById("form-title").textContent = "Editar Treino";
+  document.getElementById("f-data").value = w.data;
+  document.getElementById("f-hora").value = w.hora;
+  document.getElementById("exercises-container").innerHTML = "";
+  exerciseCount = 0;
+  (w.exercicios || []).forEach(e => addExerciseRow(e));
+  if (exerciseCount === 0) addExerciseRow();
+  updateSaunaBtn();
+  updateTurcoBtn();
+  document.getElementById("view-list").style.display = "none";
+  document.getElementById("view-form").style.display = "";
+}
+
+function openCopyForm(id) {
+  const w = workouts.find(x => x.id === id);
+  if (!w) return;
+  openEditForm(id);
+  editingId = null;
+  document.getElementById("form-title").textContent = "Novo Treino";
+  document.getElementById("f-data").value = nowDate();
+  document.getElementById("f-hora").value = nowTime();
+  showToast("Treino copiado! Edita à vontade ✏️");
+}
+
+function closeForm() {
+  document.getElementById("view-form").style.display = "none";
+  document.getElementById("view-list").style.display = "";
+  renderList();
+}
+
+function addExerciseRow(data) {
+  exerciseCount++;
+  const idx = exerciseCount;
+  const nome  = data ? data.nome   || "" : "";
+  const series= data ? data.series || "" : "";
+  const reps  = data ? data.reps   || "" : "";
+  const carga = data ? data.carga  || "" : "";
+  const tempo = data ? data.tempo  || "" : "";
+  const div = document.createElement("div");
+  div.className = "exercise-form";
+  div.id = "ex-row-" + idx;
+  div.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="exercise-num">EXERCÍCIO ${idx}</div>
+      <button class="btn btn-danger" style="font-size:0.75rem;padding:6px 10px" onclick="removeExerciseRow(${idx})">🗑️ Remover</button>
+    </div>
+    <div class="field" style="margin-bottom:10px">
+      <label>Nome do Exercício</label>
+      <input type="text" id="ex-${idx}-nome" placeholder="Ex: Supino, Corrida, Prancha..." value="${nome}" />
+    </div>
+    <div class="grid-4">
+      <div class="field"><label>Séries</label><input type="number" id="ex-${idx}-series" placeholder="3" value="${series}" /></div>
+      <div class="field"><label>Reps</label><input type="text" id="ex-${idx}-reps" placeholder="12" value="${reps}" /></div>
+      <div class="field"><label>Carga</label><input type="text" id="ex-${idx}-carga" placeholder="2X5" value="${carga}" /></div>
+      <div class="field"><label>Tempo</label><input type="text" id="ex-${idx}-tempo" placeholder="10min" value="${tempo}" /></div>
+    </div>`;
+  document.getElementById("exercises-container").appendChild(div);
+}
+
+function removeExerciseRow(idx) {
+  const el = document.getElementById("ex-row-" + idx);
+  if (el) el.remove();
+}
+
+function toggleSauna() { formSauna = !formSauna; updateSaunaBtn(); }
+function toggleTurco() { formTurco = !formTurco; updateTurcoBtn(); }
+function updateSaunaBtn() {
+  const b = document.getElementById("btn-sauna");
+  b.className = "toggle-btn" + (formSauna ? " on-sauna" : "");
+  b.textContent = "🧖 Sauna" + (formSauna ? " ✓" : "");
+}
+function updateTurcoBtn() {
+  const b = document.getElementById("btn-turco");
+  b.className = "toggle-btn" + (formTurco ? " on-turco" : "");
+  b.textContent = "💨 Banho Turco" + (formTurco ? " ✓" : "");
+}
+
+function readExercicios() {
+  const rows = document.getElementById("exercises-container").querySelectorAll(".exercise-form");
+  const result = [];
+  rows.forEach(row => {
+    const id = row.id.replace("ex-row-", "");
+    const nome  = (document.getElementById("ex-" + id + "-nome")  || {}).value || "";
+    const series= (document.getElementById("ex-" + id + "-series") || {}).value || "";
+    const reps  = (document.getElementById("ex-" + id + "-reps")  || {}).value || "";
+    const carga = (document.getElementById("ex-" + id + "-carga") || {}).value || "";
+    const tempo = (document.getElementById("ex-" + id + "-tempo") || {}).value || "";
+    if (nome.trim()) result.push({ nome, series, reps, carga, tempo });
+  });
+  return result;
+}
+
+function saveWorkout() {
+  const data = document.getElementById("f-data").value;
+  const hora = document.getElementById("f-hora").value;
+  const exercicios = readExercicios();
+  const w = { id: editingId || uid(), data, hora, exercicios, sauna: formSauna, banhoTurco: formTurco };
+  if (editingId) {
+    workouts = workouts.map(x => x.id === editingId ? w : x);
+  } else {
+    workouts.unshift(w);
+  }
+  save();
+  closeForm();
+  showToast(editingId ? "Treino atualizado! 💪" : "Treino guardado! 💪");
+}
+
+// INIT
+load();
+renderList();
+</script>
+</body>
+</html>
